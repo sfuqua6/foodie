@@ -1,0 +1,137 @@
+# Kubernetes deployment manifests for Oracle Cloud
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rate-my-rest-backend
+  labels:
+    app: rate-my-rest-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rate-my-rest-backend
+  template:
+    metadata:
+      labels:
+        app: rate-my-rest-backend
+    spec:
+      containers:
+      - name: backend
+        image: your-registry/rate-my-rest-backend:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: redis-url
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: secret-key
+        - name: GOOGLE_PLACES_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: google-api-key
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: rate-my-rest-backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rate-my-rest-frontend
+  labels:
+    app: rate-my-rest-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rate-my-rest-frontend
+  template:
+    metadata:
+      labels:
+        app: rate-my-rest-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: your-registry/rate-my-rest-frontend:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: rate-my-rest-frontend
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+stringData:
+  database-url: "postgresql://username:password@autonomous-db-host:1522/ratemyrest"
+  redis-url: "redis://redis-cache-host:6379"
+  secret-key: "your-secret-key-here"
+  google-api-key: "your-google-places-api-key"

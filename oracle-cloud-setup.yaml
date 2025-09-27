@@ -1,0 +1,55 @@
+# Oracle Cloud Infrastructure Deployment Configuration
+# Use this with OCI CLI or Terraform
+
+# 1. Container Registry Configuration
+container_registry:
+  region: "us-ashburn-1"  # Change to your preferred region
+  namespace: "your-tenancy-namespace"
+  repository: "rate-my-rest"
+
+# 2. Oracle Kubernetes Engine (OKE) Cluster
+oke_cluster:
+  name: "rate-my-rest-cluster"
+  kubernetes_version: "v1.28.2"
+  node_pool:
+    shape: "VM.Standard.E4.Flex"
+    node_count: 2
+    ocpus: 1
+    memory_gb: 8
+
+# 3. Oracle Autonomous Database Configuration
+autonomous_database:
+  display_name: "rate-my-rest-db"
+  db_name: "ratemyrest"
+  cpu_core_count: 1
+  storage_size_in_tbs: 1
+  db_workload: "OLTP"
+  auto_scaling_enabled: true
+
+# 4. OCI Cache with Redis Configuration
+redis_cache:
+  display_name: "rate-my-rest-cache"
+  node_type: "VM.Standard.E4.Flex"
+  node_count: 1
+  redis_version: "7.0"
+
+# 5. Load Balancer Configuration
+load_balancer:
+  shape: "flexible"
+  bandwidth_in_mbps: 10
+  is_private: false
+
+# 6. Object Storage for Static Assets
+object_storage:
+  bucket_name: "rate-my-rest-assets"
+  namespace: "your-tenancy-namespace"
+  storage_tier: "Standard"
+
+# 7. Environment Variables for Production
+environment_variables:
+  - DATABASE_URL: "postgresql://username:password@autonomous-db-host:1522/ratemyrest"
+  - REDIS_URL: "redis://redis-cache-host:6379"
+  - SECRET_KEY: "generate-strong-secret-key-here"
+  - GOOGLE_PLACES_API_KEY: "your-google-places-api-key"
+  - ENVIRONMENT: "production"
+  - REACT_APP_API_URL: "https://your-domain.com"

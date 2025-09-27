@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans text-neutral-800 bg-neutral-50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400;
+  }
+}
+
+@layer components {
+  /* Modern Button Styles */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-primary text-white shadow-md hover:shadow-hover hover:scale-105 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-neutral-700 border border-neutral-200 hover:bg-neutral-50 hover:shadow-card focus:ring-neutral-300;
+  }
+
+  .btn-accent {
+    @apply bg-gradient-accent text-white shadow-md hover:shadow-hover hover:scale-105 focus:ring-accent-500;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800 focus:ring-neutral-300;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+  }
+
+  /* Modern Input Styles */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border border-neutral-200 bg-white text-neutral-800 placeholder-neutral-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+
+  .input-error {
+    @apply border-red-300 focus:ring-red-500;
+  }
+
+  /* Card Styles */
+  .card {
+    @apply bg-white rounded-2xl shadow-card border border-neutral-100 overflow-hidden;
+  }
+
+  .card-hover {
+    @apply hover:shadow-hover hover:-translate-y-1 transition-all duration-300;
+  }
+
+  /* Social Media Style Elements */
+  .story-ring {
+    @apply p-1 bg-gradient-story rounded-full;
+  }
+
+  .story-avatar {
+    @apply w-16 h-16 rounded-full border-2 border-white;
+  }
+
+  /* Modern Glass Effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20;
+  }
+
+  /* Floating Action Button */
+  .fab {
+    @apply fixed bottom-6 right-6 w-14 h-14 bg-gradient-primary rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110;
+  }
+
+  /* Modern Badge */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-primary-100 text-primary-700;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary-100 text-secondary-700;
+  }
+
+  .badge-accent {
+    @apply bg-accent-100 text-accent-700;
+  }
+
+  /* Loading States */
+  .skeleton {
+    @apply bg-neutral-200 animate-pulse rounded-xl;
+  }
+
+  .loading-dots {
+    @apply inline-flex space-x-1;
+  }
+
+  .loading-dots > div {
+    @apply w-2 h-2 bg-primary-500 rounded-full animate-bounce;
+  }
+
+  .loading-dots > div:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+
+  .loading-dots > div:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+
+  /* Social Actions */
+  .like-button {
+    @apply transition-all duration-300 hover:scale-110 active:scale-95;
+  }
+
+  .like-button.liked {
+    @apply text-red-500;
+  }
+
+  /* Modern Typography */
+  .heading-1 {
+    @apply font-display text-4xl font-bold text-neutral-900 leading-tight;
+  }
+
+  .heading-2 {
+    @apply font-display text-3xl font-bold text-neutral-900 leading-tight;
+  }
+
+  .heading-3 {
+    @apply font-display text-2xl font-semibold text-neutral-900 leading-tight;
+  }
+
+  .heading-4 {
+    @apply font-display text-xl font-semibold text-neutral-900 leading-tight;
+  }
+
+  .body-large {
+    @apply text-lg text-neutral-700 leading-relaxed;
+  }
+
+  .body {
+    @apply text-base text-neutral-700 leading-relaxed;
+  }
+
+  .body-small {
+    @apply text-sm text-neutral-600 leading-relaxed;
+  }
+
+  .caption {
+    @apply text-xs text-neutral-500 leading-relaxed;
+  }
+
+  /* Feed Layout */
+  .feed-container {
+    @apply max-w-2xl mx-auto px-4 py-6 space-y-6;
+  }
+
+  .feed-item {
+    @apply card card-hover;
+  }
+
+  /* Rating Stars */
+  .star {
+    @apply w-5 h-5 transition-colors duration-200;
+  }
+
+  .star.filled {
+    @apply text-yellow-400 fill-current;
+  }
+
+  .star.empty {
+    @apply text-neutral-300;
+  }
+
+  /* Modern Progress Bar */
+  .progress {
+    @apply w-full bg-neutral-200 rounded-full h-2 overflow-hidden;
+  }
+
+  .progress-bar {
+    @apply h-full bg-gradient-primary transition-all duration-500 ease-out;
+  }
+
+  /* Floating Header */
+  .header-float {
+    @apply fixed top-0 left-0 right-0 z-50 glass shadow-sm backdrop-blur-lg transition-all duration-300;
+  }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 px-6 py-3 flex items-center justify-around;
+  }
+
+  .nav-item {
+    @apply flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors duration-200;
+  }
+
+  .nav-item.active {
+    @apply text-primary-500;
+  }
+
+  .nav-item.inactive {
+    @apply text-neutral-400 hover:text-neutral-600;
+  }
+}
+
+/* Modern Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+/* Smooth reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: reveal 0.6s ease-out forwards;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-reveal > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: reveal 0.4s ease-out forwards;
+}
+
+.stagger-reveal > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-reveal > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-reveal > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-reveal > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-reveal > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* Mobile-first responsive tweaks */
+@media (max-width: 640px) {
+  .feed-container {
+    @apply px-2 py-4 space-y-4;
+  }
+
+  .card {
+    @apply rounded-xl;
+  }
+}

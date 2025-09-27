@@ -1,0 +1,41 @@
+FROM python:3.11-slim
+
+# Install system dependencies including Oracle requirements
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    libaio1 \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Oracle Instant Client
+RUN wget -q https://download.oracle.com/otn_software/linux/instantclient/2340000/instantclient-basic-linux.x64-23.4.0.24.05.zip \
+    && unzip instantclient-basic-linux.x64-23.4.0.24.05.zip \
+    && mv instantclient_23_4 /opt/oracle \
+    && rm instantclient-basic-linux.x64-23.4.0.24.05.zip
+
+# Set Oracle environment variables
+ENV LD_LIBRARY_PATH=/opt/oracle:$LD_LIBRARY_PATH
+ENV TNS_ADMIN=/app/wallet
+
+WORKDIR /app
+
+# Copy and install requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Create non-root user and set permissions
+RUN useradd -m appuser && chown -R appuser:appuser /app
+USER appuser
+
+# Expose port
+EXPOSE 8000
+
+# Health check with Oracle support
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health')" || exit 1
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
